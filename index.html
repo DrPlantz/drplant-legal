@@ -7,11 +7,19 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0f0d; color: #efefef; line-height: 1.7; }
-  .header { background: #122018; padding: 40px 24px; text-align: center; border-bottom: 1px solid #1e2e21; }
+  .header { background: #122018; padding: 40px 24px 24px; text-align: center; border-bottom: 1px solid #1e2e21; position: relative; }
   .logo { font-size: 32px; margin-bottom: 8px; }
   .header h1 { font-size: 28px; font-weight: 800; color: #2ecc71; }
   .header p { color: #8a9e8e; font-size: 14px; margin-top: 6px; }
-  .nav { display: flex; justify-content: center; gap: 16px; padding: 20px; border-bottom: 1px solid #1e2e21; }
+  .lang-selector { position: absolute; top: 16px; right: 16px; }
+  .lang-btn { background: #1a2e1f; border: 1px solid #2ecc71; color: #2ecc71; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+  .lang-btn:hover { background: #2ecc71; color: #0a0f0d; }
+  .lang-dropdown { display: none; position: absolute; right: 0; top: 38px; background: #162019; border: 1px solid #1e2e21; border-radius: 12px; overflow: hidden; min-width: 140px; z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+  .lang-dropdown.open { display: block; }
+  .lang-option { padding: 10px 16px; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+  .lang-option:hover { background: #1e2e21; }
+  .lang-option.active { color: #2ecc71; font-weight: 700; }
+  .nav { display: flex; justify-content: center; gap: 16px; padding: 20px; border-bottom: 1px solid #1e2e21; flex-wrap: wrap; }
   .nav a { color: #2ecc71; text-decoration: none; font-weight: 600; font-size: 14px; }
   .container { max-width: 760px; margin: 0 auto; padding: 40px 24px; }
   h2 { font-size: 22px; font-weight: 800; color: #2ecc71; margin: 40px 0 16px; }
@@ -24,145 +32,161 @@
   .divider { border: none; border-top: 1px solid #1e2e21; margin: 48px 0; }
   footer { text-align: center; padding: 32px; color: #4a5e4d; font-size: 13px; }
   a { color: #2ecc71; }
+  [data-lang] { display: none; }
+  [data-lang].visible { display: block; }
 </style>
 </head>
 <body>
 
 <div class="header">
+  <div class="lang-selector">
+    <button class="lang-btn" onclick="toggleDropdown()">🌐 <span id="currentLang">IT</span> ▾</button>
+    <div class="lang-dropdown" id="langDropdown">
+      <div class="lang-option active" onclick="setLang('it')">🇮🇹 Italiano</div>
+      <div class="lang-option" onclick="setLang('en')">🇬🇧 English</div>
+      <div class="lang-option" onclick="setLang('es')">🇪🇸 Español</div>
+      <div class="lang-option" onclick="setLang('fr')">🇫🇷 Français</div>
+    </div>
+  </div>
   <div class="logo">🌿</div>
   <h1>Dr. Plant</h1>
   <p>Your AI Plant Care Companion</p>
 </div>
 
+<!-- NAV -->
 <div class="nav">
-  <a href="#privacy">Privacy Policy</a>
-  <a href="#terms">Terms of Service</a>
-  <a href="#contact">Contatti</a>
+  <a href="#privacy" data-nav-privacy>Privacy Policy</a>
+  <a href="#terms" data--nav-terms>Terms of Service</a>
+  <a href="#contact">Contact</a>
 </div>
 
 <div class="container">
 
-  <!-- PRIVACY POLICY -->
+<!-- ===== ITALIANO ===== -->
+<div data-lang="it" class="visible">
   <h2 id="privacy">Privacy Policy</h2>
   <p class="updated">Ultimo aggiornamento: 5 luglio 2026</p>
-
-  <div class="section">
-    <h3>1. Introduzione</h3>
-    <p>Dr. Plant ("noi", "nostra", "app") rispetta la tua privacy. Questa Privacy Policy descrive come raccogliamo, utilizziamo e proteggiamo le tue informazioni personali quando utilizzi la nostra applicazione mobile.</p>
-  </div>
-
-  <div class="section">
-    <h3>2. Dati che raccogliamo</h3>
-    <ul>
-      <li><strong>Account:</strong> indirizzo email, nome (tramite Google Sign-In o Apple Sign-In)</li>
-      <li><strong>Foto:</strong> immagini delle tue piante caricate per l'analisi AI</li>
-      <li><strong>Dati piante:</strong> nome, posizione, stato di salute, promemoria di cura</li>
-      <li><strong>Posizione:</strong> città/regione (opzionale, per consigli climatici)</li>
-      <li><strong>Utilizzo:</strong> numero di scansioni e messaggi inviati (per gestione abbonamento)</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h3>3. Come utilizziamo i dati</h3>
-    <ul>
-      <li>Identificare e analizzare le tue piante tramite intelligenza artificiale (Anthropic Claude)</li>
-      <li>Inviarti notifiche e promemoria di cura</li>
-      <li>Gestire il tuo account e abbonamento</li>
-      <li>Migliorare la qualità del servizio</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h3>4. Terze parti</h3>
-    <ul>
-      <li><strong>Firebase (Google):</strong> autenticazione, database, archiviazione foto</li>
-      <li><strong>Anthropic:</strong> analisi AI delle piante (le foto vengono elaborate e non conservate da Anthropic)</li>
-      <li><strong>RevenueCat:</strong> gestione abbonamenti in-app</li>
-      <li><strong>PlantNet:</strong> identificazione botanica delle specie</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h3>5. Conservazione dei dati</h3>
-    <p>I tuoi dati vengono conservati finché mantieni un account attivo. Puoi richiedere la cancellazione completa dei tuoi dati in qualsiasi momento contattandoci all'indirizzo email indicato in fondo a questa pagina.</p>
-  </div>
-
-  <div class="section">
-    <h3>6. Sicurezza</h3>
-    <p>Utilizziamo Firebase con crittografia in transito (HTTPS) e a riposo. Le credenziali di accesso sono gestite da Google e Apple tramite i loro sistemi di autenticazione sicura.</p>
-  </div>
-
-  <div class="section">
-    <h3>7. Bambini</h3>
-    <p>Dr. Plant non è destinata a bambini di età inferiore ai 13 anni. Non raccogliamo consapevolmente dati personali di minori.</p>
-  </div>
-
-  <div class="section">
-    <h3>8. I tuoi diritti (GDPR)</h3>
-    <p>Se sei residente nell'Unione Europea, hai diritto a: accedere ai tuoi dati, correggerli, cancellarli, limitarne il trattamento, e portarli altrove. Per esercitare questi diritti contattaci a <a href="mailto:benardluli5@gmail.com">benardluli5@gmail.com</a>.</p>
-  </div>
-
+  <div class="section"><h3>1. Introduzione</h3><p>Dr. Plant rispetta la tua privacy. Questa Privacy Policy descrive come raccogliamo, utilizziamo e proteggiamo le tue informazioni personali quando utilizzi la nostra applicazione mobile.</p></div>
+  <div class="section"><h3>2. Dati che raccogliamo</h3><ul><li><strong>Account:</strong> indirizzo email, nome (tramite Google o Apple Sign-In)</li><li><strong>Foto:</strong> immagini delle tue piante caricate per l'analisi AI</li><li><strong>Dati piante:</strong> nome, posizione, stato di salute, promemoria di cura</li><li><strong>Posizione:</strong> città/regione (opzionale, per consigli climatici)</li><li><strong>Utilizzo:</strong> numero di scansioni e messaggi (per gestione abbonamento)</li></ul></div>
+  <div class="section"><h3>3. Come utilizziamo i dati</h3><ul><li>Identificare e analizzare le tue piante tramite AI (Anthropic Claude)</li><li>Inviarti notifiche e promemoria di cura</li><li>Gestire il tuo account e abbonamento</li><li>Migliorare la qualità del servizio</li></ul></div>
+  <div class="section"><h3>4. Terze parti</h3><ul><li><strong>Firebase (Google):</strong> autenticazione, database, archiviazione foto</li><li><strong>Anthropic:</strong> analisi AI (le foto vengono elaborate e non conservate)</li><li><strong>RevenueCat:</strong> gestione abbonamenti in-app</li><li><strong>PlantNet:</strong> identificazione botanica delle specie</li></ul></div>
+  <div class="section"><h3>5. Conservazione dei dati</h3><p>I tuoi dati vengono conservati finché mantieni un account attivo. Puoi richiedere la cancellazione completa contattandoci via email.</p></div>
+  <div class="section"><h3>6. Sicurezza</h3><p>Utilizziamo Firebase con crittografia in transito (HTTPS) e a riposo. Le credenziali sono gestite da Google e Apple.</p></div>
+  <div class="section"><h3>7. Bambini</h3><p>Dr. Plant non è destinata a bambini sotto i 13 anni. Non raccogliamo consapevolmente dati di minori.</p></div>
+  <div class="section"><h3>8. I tuoi diritti (GDPR)</h3><p>Se sei residente nell'UE hai diritto ad accedere, correggere, cancellare e portare i tuoi dati. Contattaci a <a href="mailto:benardluli5@gmail.com">benardluli5@gmail.com</a>.</p></div>
   <hr class="divider">
-
-  <!-- TERMS OF SERVICE -->
   <h2 id="terms">Terms of Service</h2>
   <p class="updated">Ultimo aggiornamento: 5 luglio 2026</p>
-
-  <div class="section">
-    <h3>1. Accettazione</h3>
-    <p>Utilizzando Dr. Plant accetti questi Termini di Servizio. Se non sei d'accordo, ti preghiamo di non utilizzare l'app.</p>
-  </div>
-
-  <div class="section">
-    <h3>2. Descrizione del servizio</h3>
-    <p>Dr. Plant è un'applicazione mobile che utilizza l'intelligenza artificiale per identificare piante, analizzarne lo stato di salute e fornire consigli di cura. Le analisi sono fornite a scopo informativo e non sostituiscono la consulenza di un botanico professionista.</p>
-  </div>
-
-  <div class="section">
-    <h3>3. Account</h3>
-    <p>Sei responsabile della sicurezza del tuo account. Non condividere le credenziali di accesso. Puoi eliminare il tuo account in qualsiasi momento dalla sezione Profilo dell'app.</p>
-  </div>
-
-  <div class="section">
-    <h3>4. Abbonamento</h3>
-    <ul>
-      <li>Dr. Plant offre una versione gratuita con funzionalità limitate e un abbonamento premium</li>
-      <li>Gli abbonamenti si rinnovano automaticamente salvo cancellazione almeno 24 ore prima del rinnovo</li>
-      <li>La gestione e cancellazione avviene tramite le impostazioni dell'App Store/Google Play</li>
-      <li>Non sono previsti rimborsi per i periodi già pagati, salvo quanto previsto dalle politiche Apple/Google</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h3>5. Uso accettabile</h3>
-    <p>Ti impegni a non utilizzare Dr. Plant per scopi illegali, a non tentare di accedere ai sistemi in modo non autorizzato, e a non caricare contenuti offensivi o non pertinenti.</p>
-  </div>
-
-  <div class="section">
-    <h3>6. Limitazione di responsabilità</h3>
-    <p>Dr. Plant fornisce informazioni a scopo educativo e informativo. Non siamo responsabili per danni a piante, animali o persone derivanti dall'applicazione dei consigli forniti dall'app.</p>
-  </div>
-
-  <div class="section">
-    <h3>7. Modifiche</h3>
-    <p>Ci riserviamo il diritto di modificare questi termini in qualsiasi momento. Le modifiche saranno notificate tramite l'app. L'uso continuato dell'app dopo le modifiche costituisce accettazione dei nuovi termini.</p>
-  </div>
-
+  <div class="section"><h3>1. Accettazione</h3><p>Utilizzando Dr. Plant accetti questi Termini. Se non sei d'accordo, non utilizzare l'app.</p></div>
+  <div class="section"><h3>2. Descrizione del servizio</h3><p>Dr. Plant utilizza l'AI per identificare piante e fornire consigli di cura a scopo informativo. Non sostituisce la consulenza di un botanico professionista.</p></div>
+  <div class="section"><h3>3. Account</h3><p>Sei responsabile della sicurezza del tuo account. Puoi eliminarlo in qualsiasi momento dalla sezione Profilo.</p></div>
+  <div class="section"><h3>4. Abbonamento</h3><ul><li>Versione gratuita con funzionalità limitate e abbonamento premium disponibile</li><li>Rinnovo automatico salvo cancellazione 24 ore prima del rinnovo</li><li>Gestione tramite impostazioni App Store/Google Play</li></ul></div>
+  <div class="section"><h3>5. Limitazione di responsabilità</h3><p>Non siamo responsabili per danni derivanti dall'applicazione dei consigli forniti dall'app.</p></div>
+  <div class="section"><h3>6. Modifiche</h3><p>Ci riserviamo il diritto di modificare questi termini. Le modifiche saranno notificate tramite l'app.</p></div>
   <hr class="divider">
-
-  <!-- CONTACT -->
   <h2 id="contact">Contatti</h2>
-  <div class="section">
-    <p>Per qualsiasi domanda sulla privacy o sui termini di servizio:</p>
-    <p><strong>Email:</strong> <a href="mailto:benardluli5@gmail.com">benardluli5@gmail.com</a></p>
-    <p><strong>App:</strong> Dr. Plant — AI Plant Care</p>
-  </div>
+  <div class="section"><p><strong>Email:</strong> <a href="mailto:benardluli5@gmail.com">benardluli5@gmail.com</a></p></div>
+</div>
+
+<!-- ===== ENGLISH ===== -->
+<div data-lang="en">
+  <h2>Privacy Policy</h2>
+  <p class="updated">Last updated: July 5, 2026</p>
+  <div class="section"><h3>1. Introduction</h3><p>Dr. Plant respects your privacy. This Privacy Policy describes how we collect, use, and protect your personal information when you use our mobile application.</p></div>
+  <div class="section"><h3>2. Data we collect</h3><ul><li><strong>Account:</strong> email address, name (via Google or Apple Sign-In)</li><li><strong>Photos:</strong> images of your plants uploaded for AI analysis</li><li><strong>Plant data:</strong> name, location, health status, care reminders</li><li><strong>Location:</strong> city/region (optional, for climate-based advice)</li><li><strong>Usage:</strong> number of scans and messages (for subscription management)</li></ul></div>
+  <div class="section"><h3>3. How we use your data</h3><ul><li>Identify and analyze your plants using AI (Anthropic Claude)</li><li>Send you care notifications and reminders</li><li>Manage your account and subscription</li><li>Improve service quality</li></ul></div>
+  <div class="section"><h3>4. Third parties</h3><ul><li><strong>Firebase (Google):</strong> authentication, database, photo storage</li><li><strong>Anthropic:</strong> AI analysis (photos are processed and not retained)</li><li><strong>RevenueCat:</strong> in-app subscription management</li><li><strong>PlantNet:</strong> botanical species identification</li></ul></div>
+  <div class="section"><h3>5. Data retention</h3><p>Your data is retained as long as you have an active account. You can request full deletion by contacting us via email.</p></div>
+  <div class="section"><h3>6. Security</h3><p>We use Firebase with encryption in transit (HTTPS) and at rest. Credentials are managed by Google and Apple.</p></div>
+  <div class="section"><h3>7. Children</h3><p>Dr. Plant is not intended for children under 13. We do not knowingly collect data from minors.</p></div>
+  <div class="section"><h3>8. Your rights (GDPR)</h3><p>If you are an EU resident, you have the right to access, correct, delete, and port your data. Contact us at <a href="mailto:benardluli5@gmail.com">benardluli5@gmail.com</a>.</p></div>
+  <hr class="divider">
+  <h2>Terms of Service</h2>
+  <p class="updated">Last updated: July 5, 2026</p>
+  <div class="section"><h3>1. Acceptance</h3><p>By using Dr. Plant you accept these Terms. If you disagree, please do not use the app.</p></div>
+  <div class="section"><h3>2. Service description</h3><p>Dr. Plant uses AI to identify plants and provide care advice for informational purposes only. It does not replace professional botanical consultation.</p></div>
+  <div class="section"><h3>3. Account</h3><p>You are responsible for your account security. You may delete it at any time from the Profile section.</p></div>
+  <div class="section"><h3>4. Subscription</h3><ul><li>Free version with limited features and premium subscription available</li><li>Auto-renewal unless cancelled 24 hours before renewal date</li><li>Managed via App Store/Google Play settings</li></ul></div>
+  <div class="section"><h3>5. Limitation of liability</h3><p>We are not responsible for any damage resulting from applying advice provided by the app.</p></div>
+  <div class="section"><h3>6. Changes</h3><p>We reserve the right to modify these terms. Changes will be notified through the app.</p></div>
+  <hr class="divider">
+  <h2>Contact</h2>
+  <div class="section"><p><strong>Email:</strong> <a href="mailto:benardluli5@gmail.com">benardluli5@gmail.com</a></p></div>
+</div>
+
+<!-- ===== ESPAÑOL ===== -->
+<div data-lang="es">
+  <h2>Política de Privacidad</h2>
+  <p class="updated">Última actualización: 5 de julio de 2026</p>
+  <div class="section"><h3>1. Introducción</h3><p>Dr. Plant respeta tu privacidad. Esta Política de Privacidad describe cómo recopilamos, usamos y protegemos tu información personal cuando usas nuestra aplicación móvil.</p></div>
+  <div class="section"><h3>2. Datos que recopilamos</h3><ul><li><strong>Cuenta:</strong> correo electrónico, nombre (mediante Google o Apple Sign-In)</li><li><strong>Fotos:</strong> imágenes de tus plantas para análisis de IA</li><li><strong>Datos de plantas:</strong> nombre, ubicación, estado de salud, recordatorios</li><li><strong>Ubicación:</strong> ciudad/región (opcional, para consejos climáticos)</li><li><strong>Uso:</strong> número de escaneos y mensajes (para gestión de suscripción)</li></ul></div>
+  <div class="section"><h3>3. Cómo usamos los datos</h3><ul><li>Identificar y analizar tus plantas mediante IA (Anthropic Claude)</li><li>Enviarte notificaciones y recordatorios de cuidado</li><li>Gestionar tu cuenta y suscripción</li><li>Mejorar la calidad del servicio</li></ul></div>
+  <div class="section"><h3>4. Terceros</h3><ul><li><strong>Firebase (Google):</strong> autenticación, base de datos, almacenamiento de fotos</li><li><strong>Anthropic:</strong> análisis de IA (las fotos se procesan y no se conservan)</li><li><strong>RevenueCat:</strong> gestión de suscripciones dentro de la app</li><li><strong>PlantNet:</strong> identificación botánica de especies</li></ul></div>
+  <div class="section"><h3>5. Retención de datos</h3><p>Tus datos se conservan mientras tengas una cuenta activa. Puedes solicitar la eliminación completa contactándonos por email.</p></div>
+  <div class="section"><h3>6. Seguridad</h3><p>Usamos Firebase con cifrado en tránsito (HTTPS) y en reposo. Las credenciales son gestionadas por Google y Apple.</p></div>
+  <div class="section"><h3>7. Menores</h3><p>Dr. Plant no está destinada a menores de 13 años. No recopilamos datos de menores de forma consciente.</p></div>
+  <div class="section"><h3>8. Tus derechos (GDPR)</h3><p>Si eres residente de la UE, tienes derecho a acceder, corregir, eliminar y portar tus datos. Contáctanos en <a href="mailto:benardluli5@gmail.com">benardluli5@gmail.com</a>.</p></div>
+  <hr class="divider">
+  <h2>Términos de Servicio</h2>
+  <p class="updated">Última actualización: 5 de julio de 2026</p>
+  <div class="section"><h3>1. Aceptación</h3><p>Al usar Dr. Plant aceptas estos Términos. Si no estás de acuerdo, por favor no uses la app.</p></div>
+  <div class="section"><h3>2. Descripción del servicio</h3><p>Dr. Plant usa IA para identificar plantas y ofrecer consejos de cuidado con fines informativos. No reemplaza la consulta de un botánico profesional.</p></div>
+  <div class="section"><h3>3. Cuenta</h3><p>Eres responsable de la seguridad de tu cuenta. Puedes eliminarla en cualquier momento desde la sección Perfil.</p></div>
+  <div class="section"><h3>4. Suscripción</h3><ul><li>Versión gratuita con funciones limitadas y suscripción premium disponible</li><li>Renovación automática salvo cancelación 24 horas antes de la fecha de renovación</li><li>Gestión mediante la configuración de App Store/Google Play</li></ul></div>
+  <div class="section"><h3>5. Limitación de responsabilidad</h3><p>No somos responsables de daños derivados de la aplicación de los consejos proporcionados por la app.</p></div>
+  <div class="section"><h3>6. Cambios</h3><p>Nos reservamos el derecho de modificar estos términos. Los cambios serán notificados a través de la app.</p></div>
+  <hr class="divider">
+  <h2>Contacto</h2>
+  <div class="section"><p><strong>Email:</strong> <a href="mailto:benardluli5@gmail.com">benardluli5@gmail.com</a></p></div>
+</div>
+
+<!-- ===== FRANÇAIS ===== -->
+<div data-lang="fr">
+  <h2>Politique de Confidentialité</h2>
+  <p class="updated">Dernière mise à jour : 5 juillet 2026</p>
+  <div class="section"><h3>1. Introduction</h3><p>Dr. Plant respecte votre vie privée. Cette Politique de Confidentialité décrit comment nous collectons, utilisons et protégeons vos informations personnelles lors de l'utilisation de notre application mobile.</p></div>
+  <div class="section"><h3>2. Données collectées</h3><ul><li><strong>Compte :</strong> adresse email, nom (via Google ou Apple Sign-In)</li><li><strong>Photos :</strong> images de vos plantes pour l'analyse IA</li><li><strong>Données plantes :</strong> nom, emplacement, état de santé, rappels</li><li><strong>Localisation :</strong> ville/région (optionnel, pour conseils climatiques)</li><li><strong>Utilisation :</strong> nombre de scans et messages (gestion abonnement)</li></ul></div>
+  <div class="section"><h3>3. Utilisation des données</h3><ul><li>Identifier et analyser vos plantes via IA (Anthropic Claude)</li><li>Vous envoyer des notifications et rappels d'entretien</li><li>Gérer votre compte et abonnement</li><li>Améliorer la qualité du service</li></ul></div>
+  <div class="section"><h3>4. Tiers</h3><ul><li><strong>Firebase (Google) :</strong> authentification, base de données, stockage photos</li><li><strong>Anthropic :</strong> analyse IA (les photos sont traitées et non conservées)</li><li><strong>RevenueCat :</strong> gestion des abonnements in-app</li><li><strong>PlantNet :</strong> identification botanique des espèces</li></ul></div>
+  <div class="section"><h3>5. Conservation des données</h3><p>Vos données sont conservées tant que votre compte est actif. Vous pouvez demander la suppression complète en nous contactant par email.</p></div>
+  <div class="section"><h3>6. Sécurité</h3><p>Nous utilisons Firebase avec chiffrement en transit (HTTPS) et au repos. Les identifiants sont gérés par Google et Apple.</p></div>
+  <div class="section"><h3>7. Mineurs</h3><p>Dr. Plant n'est pas destinée aux enfants de moins de 13 ans. Nous ne collectons pas sciemment de données sur des mineurs.</p></div>
+  <div class="section"><h3>8. Vos droits (RGPD)</h3><p>Si vous résidez dans l'UE, vous avez le droit d'accéder, corriger, supprimer et transférer vos données. Contactez-nous à <a href="mailto:benardluli5@gmail.com">benardluli5@gmail.com</a>.</p></div>
+  <hr class="divider">
+  <h2>Conditions d'Utilisation</h2>
+  <p class="updated">Dernière mise à jour : 5 juillet 2026</p>
+  <div class="section"><h3>1. Acceptation</h3><p>En utilisant Dr. Plant, vous acceptez ces Conditions. Si vous n'êtes pas d'accord, veuillez ne pas utiliser l'application.</p></div>
+  <div class="section"><h3>2. Description du service</h3><p>Dr. Plant utilise l'IA pour identifier les plantes et fournir des conseils d'entretien à titre informatif. Cela ne remplace pas la consultation d'un botaniste professionnel.</p></div>
+  <div class="section"><h3>3. Compte</h3><p>Vous êtes responsable de la sécurité de votre compte. Vous pouvez le supprimer à tout moment depuis la section Profil.</p></div>
+  <div class="section"><h3>4. Abonnement</h3><ul><li>Version gratuite avec fonctionnalités limitées et abonnement premium disponible</li><li>Renouvellement automatique sauf annulation 24 heures avant la date de renouvellement</li><li>Gestion via les paramètres App Store/Google Play</li></ul></div>
+  <div class="section"><h3>5. Limitation de responsabilité</h3><p>Nous ne sommes pas responsables des dommages résultant de l'application des conseils fournis par l'application.</p></div>
+  <div class="section"><h3>6. Modifications</h3><p>Nous nous réservons le droit de modifier ces conditions. Les modifications seront notifiées via l'application.</p></div>
+  <hr class="divider">
+  <h2>Contact</h2>
+  <div class="section"><p><strong>Email :</strong> <a href="mailto:benardluli5@gmail.com">benardluli5@gmail.com</a></p></div>
+</div>
 
 </div>
 
-<footer>
-  © 2026 Dr. Plant. Tutti i diritti riservati.
-</footer>
+<footer>© 2026 Dr. Plant. All rights reserved.</footer>
 
+<script>
+function toggleDropdown() {
+  document.getElementById('langDropdown').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.lang-selector')) {
+    document.getElementById('langDropdown').classList.remove('open');
+  }
+});
+function setLang(lang) {
+  document.querySelectorAll('[data-lang]').forEach(el => el.classList.remove('visible'));
+  document.querySelector('[data-lang="' + lang + '"]').classList.add('visible');
+  document.querySelectorAll('.lang-option').forEach(el => el.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('currentLang').textContent = lang.toUpperCase();
+  document.getElementById('langDropdown').classList.remove('open');
+}
+</script>
 </body>
 </html>
